@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        release {
+            Properties keystoreProps = new Properties()
+            keystoreProps.load(new FileInputStream(file('keystore.config')))
+
+            keyAlias keystoreProps['keyAlias']
+            keyPassword keystoreProps['keyPassword']
+            storePassword keystoreProps['storePassword']
+            storeFile file(keystoreProps['keyPath'])
+        }
+    }
+
+    compileSdk 35
+    buildToolsVersion "36.0.0-rc4"
+    namespace 'com.fastsmartsystem.saf'
+
+    defaultConfig {
+        applicationId "com.fastsmartsystem.saf"
+        minSdk 28
+        targetSdk 35
+        versionCode 17
+        versionName "2.9"
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    implementation files('libs/android-backend-release.aar', 'libs/forcex.jar')
+}
